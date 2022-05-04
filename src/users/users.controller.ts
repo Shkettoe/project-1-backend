@@ -8,6 +8,8 @@ import { AuthService } from './auth.service';
 import { Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
 import { InauthGuard } from './guards/inauth.guard';
+import { CurrentUser } from './decorators/current_user.decorator';
+import { User } from './entities/user.entity';
 
 @Controller('users')
 @MakeSerialisation(UserDto)
@@ -42,8 +44,8 @@ export class UsersController {
   }
 
   @Get('me')
-  findMe(@Request() request){
-    return request.userCurrent
+  findMe(@CurrentUser() user: User){
+    return user
   }
 
   @Get(':id')
