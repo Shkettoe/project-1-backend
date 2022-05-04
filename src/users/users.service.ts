@@ -32,11 +32,19 @@ export class UsersService {
     }  
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    try{
+      const user = await this.findOne(id)
+      for (const key in user) {
+        if(updateUserDto[key]) user[key] = updateUserDto[key]
+      }
+      return await this.userRepo.save(user)
+    }catch(err){throw new NotFoundException(`user with an id of ${id} not found`)}
   }
 
   remove(id: number) {
-    return `This action removes a #${id} user`;
+    try{
+      return this.userRepo.delete(id)
+    } catch(err){throw new NotFoundException(`user with an id of ${id} not found`)}
   }
 }

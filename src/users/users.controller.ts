@@ -1,7 +1,6 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Res, UseGuards, Request } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Res, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { UserDto } from './dto/user.dto';
 import { MakeSerialisation } from 'src/interceptors/serialise.interceptor';
 import { AuthService } from './auth.service';
@@ -10,7 +9,6 @@ import { AuthGuard } from '@nestjs/passport';
 import { InauthGuard } from './guards/inauth.guard';
 import { CurrentUser } from './decorators/current_user.decorator';
 import { User } from './entities/user.entity';
-import { IdentityGuard } from './guards/identity.guard';
 
 @Controller('users')
 @MakeSerialisation(UserDto)
@@ -18,10 +16,11 @@ export class UsersController {
   constructor(private readonly usersService: UsersService, private readonly authService: AuthService) {}
 
   @Post('register')
-  @UseGuards(AuthGuard('local'), InauthGuard)
+  @UseGuards(InauthGuard)
   async register(@Body() createUserDto: CreateUserDto, @Res({passthrough: true})response: Response) {
-    const {jwt} = await this.authService.register(createUserDto);
-    return response.cookie('jwt', jwt, {httpOnly: true})
+    const {jwt, user} = await this.authService.register(createUserDto);
+    response.cookie('jwt', jwt, {httpOnly: true})
+    return user
   }
 
   @Post('login')
@@ -55,12 +54,22 @@ export class UsersController {
   }
 
   @Patch('/me')
-  update(@CurrentUser() user: User, @Body() updateUserDto: UpdateUserDto) {
+  update(@CurrentUser() user: User, @Body() updateUserDto: UserDto) {
     return this.usersService.update(user.id, updateUserDto);
   }
 
+  @Patch('/me/update-password')
+  async updatePassword(@CurrentUser() user: User, @Body() {password, confirm_password}: {password: string, confirm_password: string}) {
+    if(password === confirm_password){
+      password = await this.authService.hash(password)
+      return await this.usersService.update(user.id, {password});
+    }
+    return {msg: "passwords do not match"}
+  }
+
   @Delete('/me')
-  remove(@CurrentUser() user: User) {
+  remove(@CurrentUser() user: User, @Res({ passthrough: true }) res: Response) {
+    res.clearCookie('jwt', {httpOnly: true})
     return this.usersService.remove(user.id);
   }
 }
