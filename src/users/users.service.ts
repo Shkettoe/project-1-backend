@@ -12,7 +12,8 @@ export class UsersService {
   constructor(@InjectRepository(User) private readonly userRepo: Repository<User>){}
 
   create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+    const user = this.userRepo.create(createUserDto)
+    return this.userRepo.save(user);
   }
 
   async findAll(query: Partial<User>) {
