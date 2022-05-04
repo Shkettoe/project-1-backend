@@ -10,6 +10,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { InauthGuard } from './guards/inauth.guard';
 import { CurrentUser } from './decorators/current_user.decorator';
 import { User } from './entities/user.entity';
+import { IdentityGuard } from './guards/identity.guard';
 
 @Controller('users')
 @MakeSerialisation(UserDto)
@@ -54,12 +55,14 @@ export class UsersController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
+  @UseGuards(IdentityGuard)
+  update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.update(id, updateUserDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+  @UseGuards(IdentityGuard)
+  remove(@Param('id') id: number) {
+    return this.usersService.remove(id);
   }
 }
