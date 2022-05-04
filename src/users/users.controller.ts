@@ -50,19 +50,17 @@ export class UsersController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
+  findOne(@Param('id') id: User['id']) {
+    return this.usersService.findOne(id);
   }
 
-  @Patch(':id')
-  @UseGuards(IdentityGuard)
-  update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(id, updateUserDto);
+  @Patch('/me')
+  update(@CurrentUser() user: User, @Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.update(user.id, updateUserDto);
   }
 
-  @Delete(':id')
-  @UseGuards(IdentityGuard)
-  remove(@Param('id') id: number) {
-    return this.usersService.remove(id);
+  @Delete('/me')
+  remove(@CurrentUser() user: User) {
+    return this.usersService.remove(user.id);
   }
 }
