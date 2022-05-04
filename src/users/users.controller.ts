@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Res, UseGuards, Request } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -39,6 +39,11 @@ export class UsersController {
   @Get()
   findAll(@Query() q?: Partial<UserDto>) {
     return this.usersService.findAll(q);
+  }
+
+  @Get('me')
+  findMe(@Request() request){
+    return request.userCurrent
   }
 
   @Get(':id')

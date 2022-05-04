@@ -10,6 +10,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
+import { CurrentUserInterceptor } from './interceptors/current_user.interceptor';
 
 @Module({
   imports:[TypeOrmModule.forFeature([User]), PassportModule, JwtModule.registerAsync({
@@ -20,6 +21,6 @@ import { LocalStrategy } from './strategies/local.strategy';
     inject: [ConfigService]
   })],
   controllers: [UsersController],
-  providers: [UsersService, AuthService, { provide: APP_INTERCEPTOR, useClass: ClassSerializerInterceptor }, JwtStrategy, LocalStrategy]
+  providers: [UsersService, AuthService, { provide: APP_INTERCEPTOR, useClass: ClassSerializerInterceptor }, { provide: APP_INTERCEPTOR, useClass: CurrentUserInterceptor}, JwtStrategy, LocalStrategy]
 })
 export class UsersModule {}
