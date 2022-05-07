@@ -7,17 +7,17 @@ import { User } from './users/entities/user.entity';
 import { UsersModule } from './users/users.module';
 
 @Module({
-  imports: [ConfigModule.forRoot({isGlobal: true}), TypeOrmModule.forRootAsync({
+  imports: [ConfigModule.forRoot({isGlobal: true, envFilePath: '.env'}), TypeOrmModule.forRootAsync({
     imports: [ConfigModule],
     useFactory: async (configService: ConfigService) => ({
       type: 'postgres',
       host: configService.get('HOST'),
-      post: configService.get('PGPORT'),
+      port: configService.get('PGPORT'),
       username: configService.get('PGUSER'),
       password: configService.get('PGPASSWORD'),
       database: configService.get('PGDATABASE'),
-      synchronize: true,
-      entities: [User],
+      synchronize: false,
+      entities: [User]
     }),
     inject: [ConfigService]
   }), UsersModule],
