@@ -1,5 +1,5 @@
 import { PartialType } from "@nestjs/mapped-types";
-import { Exclude } from "class-transformer";
+import { Exclude, Expose } from "class-transformer";
 import { CreateUserDto } from "./create-user.dto";
 
 export class UserDto extends PartialType(CreateUserDto){

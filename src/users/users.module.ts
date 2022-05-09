@@ -21,6 +21,7 @@ import { CurrentUserInterceptor } from './interceptors/current_user.interceptor'
     inject: [ConfigService]
   })],
   controllers: [UsersController],
-  providers: [UsersService, AuthService, { provide: APP_INTERCEPTOR, useClass: ClassSerializerInterceptor }, { provide: APP_INTERCEPTOR, useClass: CurrentUserInterceptor}, JwtStrategy, LocalStrategy]
+  providers: [UsersService, AuthService, { provide: APP_INTERCEPTOR, useClass: ClassSerializerInterceptor }, { provide: APP_INTERCEPTOR, useClass: CurrentUserInterceptor}, JwtStrategy, LocalStrategy],
+  exports: [JwtModule]
 })
 export class UsersModule {}
