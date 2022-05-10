@@ -9,6 +9,7 @@ import { AuthorGuard } from './guards/author.guard';
 import { Portray } from 'src/interceptors/serialise.interceptor';
 import { PostDto } from './dto/post.dto';
 import { VoteService } from 'src/votes/vote.service';
+import { PassThrough } from 'stream';
 
 @Controller('posts')
 @UseGuards(AuthGuard('jwt'))

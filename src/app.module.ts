@@ -6,6 +6,8 @@ import { UsersModule } from './users/users.module';
 import { PostsModule } from './posts/posts.module';
 import { Post } from './posts/entities/post.entity';
 import { Vote } from './votes/vote.entity';
+import { AppController } from './app.controller';
+import { PostsService } from './posts/posts.service';
 
 @Module({
   imports: [ConfigModule.forRoot({isGlobal: true, envFilePath: '.env'}), TypeOrmModule.forRootAsync({
@@ -22,7 +24,7 @@ import { Vote } from './votes/vote.entity';
     }),
     inject: [ConfigService]
   }), UsersModule, PostsModule],
-  controllers: [],
+  controllers: [AppController],
   providers: [ConfigService],
 })
 export class AppModule {}

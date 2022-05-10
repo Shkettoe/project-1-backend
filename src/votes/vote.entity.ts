@@ -10,9 +10,9 @@ export class Vote{
     @Column({type: 'bool'})
     val: boolean
 
-    @ManyToOne(() => User, {cascade: true, onDelete: 'CASCADE', onUpdate: 'CASCADE'})
+    @ManyToOne(() => User, user => user.votes,{cascade: true, onDelete: 'CASCADE', onUpdate: 'CASCADE'})
     user: User
 
-    @ManyToOne(() => Post, {cascade: true, onDelete: 'CASCADE', onUpdate: 'CASCADE'})
+    @ManyToOne(() => Post, post => post.votes, {cascade: true, onDelete: 'CASCADE', onUpdate: 'CASCADE'})
     post: Post
 }

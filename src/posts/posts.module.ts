@@ -11,6 +11,7 @@ import { VoteService } from 'src/votes/vote.service';
 @Module({
   imports: [TypeOrmModule.forFeature([Post, Vote]), UsersModule],
   controllers: [PostsController],
-  providers: [PostsService, { provide: APP_INTERCEPTOR, useClass: ClassSerializerInterceptor }, VoteService]
+  providers: [PostsService, { provide: APP_INTERCEPTOR, useClass: ClassSerializerInterceptor }, VoteService],
+  exports: [PostsService, VoteService]
 })
 export class PostsModule {}
