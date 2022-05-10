@@ -6,9 +6,12 @@ import { CurrentUser } from 'src/users/decorators/current_user.decorator';
 import { User } from 'src/users/entities/user.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthorGuard } from './guards/author.guard';
+import { Portray } from 'src/interceptors/serialise.interceptor';
+import { PostDto } from './dto/post.dto';
 
 @Controller('posts')
 @UseGuards(AuthGuard('jwt'))
+@Portray(PostDto)
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 

@@ -3,7 +3,7 @@ import { plainToClass } from 'class-transformer';
 import { map, Observable } from 'rxjs';
 import { DtoConstructor } from 'src/interfaces/dto-constructor.interface';
 
-export const MakeSerialisation = (dto: DtoConstructor) =>{
+export const Portray = (dto: DtoConstructor) =>{
   return UseInterceptors(new SerialiseInterceptor(dto))
 }
 

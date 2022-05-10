@@ -1,4 +1,4 @@
-import { Exclude, Expose } from "class-transformer";
+import { Exclude, Expose, Transform } from "class-transformer";
 import { User } from "src/users/entities/user.entity";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
@@ -11,10 +11,8 @@ export class Post {
     content: string
 
     @ManyToOne(() => User, user => user.posts)
-    @Exclude()
     user: User
 
-    @Expose()
     get author(): string{
         return `${this.user.first_name} ${this.user.last_name}`
     }
