@@ -1,4 +1,3 @@
-import { Exclude, Expose, Transform } from "class-transformer";
 import { User } from "src/users/entities/user.entity";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
@@ -10,7 +9,7 @@ export class Post {
     @Column({nullable: false})
     content: string
 
-    @ManyToOne(() => User, user => user.posts)
+    @ManyToOne(() => User, user => user.posts, {cascade: true, onDelete: 'CASCADE', onUpdate: 'CASCADE'})
     user: User
 
     get author(): string{
