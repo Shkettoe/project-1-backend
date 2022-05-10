@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { User } from './users/entities/user.entity';
 import { UsersModule } from './users/users.module';
+import { PostsModule } from './posts/posts.module';
+import { Post } from './posts/entities/post.entity';
 
 @Module({
   imports: [ConfigModule.forRoot({isGlobal: true, envFilePath: '.env'}), TypeOrmModule.forRootAsync({
@@ -17,10 +17,10 @@ import { UsersModule } from './users/users.module';
       password: configService.get('PGPASSWORD'),
       database: configService.get('PGDATABASE'),
       synchronize: false,
-      entities: [User]
+      entities: [User, Post]
     }),
     inject: [ConfigService]
-  }), UsersModule],
+  }), UsersModule, PostsModule],
   controllers: [],
   providers: [ConfigService],
 })

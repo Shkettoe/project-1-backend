@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Res, UseGuard
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserDto } from './dto/user.dto';
-import { MakeSerialisation } from 'src/interceptors/serialise.interceptor';
+import { Portray } from 'src/interceptors/serialise.interceptor';
 import { AuthService } from './auth.service';
 import { Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
@@ -11,7 +11,7 @@ import { CurrentUser } from './decorators/current_user.decorator';
 import { User } from './entities/user.entity';
 
 @Controller('users')
-@MakeSerialisation(UserDto)
+@Portray(UserDto)
 export class UsersController {
   constructor(private readonly usersService: UsersService, private readonly authService: AuthService) {}
 
