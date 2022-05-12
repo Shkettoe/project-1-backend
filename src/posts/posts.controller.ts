@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Res } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
@@ -9,7 +9,7 @@ import { AuthorGuard } from './guards/author.guard';
 import { Portray } from 'src/interceptors/serialise.interceptor';
 import { PostDto } from './dto/post.dto';
 import { VoteService } from 'src/votes/vote.service';
-import { PassThrough } from 'stream';
+import { InauthorGuard } from './guards/inauthor.guard';
 
 @Controller('posts')
 @UseGuards(AuthGuard('jwt'))
@@ -23,12 +23,14 @@ export class PostsController {
   }
 
   @Post(':id/upvote')
+  @UseGuards(InauthorGuard)
   async upvote(@CurrentUser() user: User, @Param('id') id: number){
     const post = await this.findOne(id)
     return this.voteService.vote(true, user, post)
   }
 
   @Post(':id/downvote')
+  @UseGuards(InauthorGuard)
   async downvote(@CurrentUser() user: User, @Param('id') id: number){
     const post = await this.findOne(id)
     return this.voteService.vote(false, user, post)

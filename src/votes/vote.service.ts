@@ -15,10 +15,22 @@ export class VoteService {
     }
 
     async vote(val: boolean, user: User, post: Post){
-        // try{
-        //     const voted = 
-        // }
+        const voted = await this.getVote(user, post)
+        if(voted){
+            if(voted.val === val) return this.delete(voted.id).then(() => {})
+            return this.update(voted.id)
+        }
         const v0te = await this.voteRepo.create({val, user, post})
         return this.voteRepo.save(v0te)
+    }
+
+    async update(id: number){
+        const vote = await this.voteRepo.findOne(id)
+        vote.val = !vote.val
+        return await this.voteRepo.save(vote)
+    }
+
+    async delete(id: number){
+        return await this.voteRepo.delete(id)
     }
 }
