@@ -19,7 +19,7 @@ export class User {
     @Column({nullable: false})
     password: string
 
-    @Column({default: ''})
+    @Column({default: 'http://localhost:8000/users/uploads/default.png'})
     avatar: string
 
     @OneToMany(() => Post, post => post.user)
