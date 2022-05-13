@@ -18,7 +18,7 @@ export class PostsService {
   }
 
   findOne(id: number) {
-    return this.postRepo.findOne(id, {relations: ['user']})
+    return this.postRepo.findOneOrFail(id, {relations: ['user']})
   }
 
   async update(id: number, updatePostDto: UpdatePostDto) {

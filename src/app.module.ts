@@ -5,6 +5,9 @@ import { User } from './users/entities/user.entity';
 import { UsersModule } from './users/users.module';
 import { PostsModule } from './posts/posts.module';
 import { Post } from './posts/entities/post.entity';
+import { Vote } from './votes/vote.entity';
+import { AppController } from './app.controller';
+import { PostsService } from './posts/posts.service';
 
 @Module({
   imports: [ConfigModule.forRoot({isGlobal: true, envFilePath: '.env'}), TypeOrmModule.forRootAsync({
@@ -17,11 +20,11 @@ import { Post } from './posts/entities/post.entity';
       password: configService.get('PGPASSWORD'),
       database: configService.get('PGDATABASE'),
       synchronize: false,
-      entities: [User, Post]
+      entities: [User, Post, Vote]
     }),
     inject: [ConfigService]
   }), UsersModule, PostsModule],
-  controllers: [],
+  controllers: [AppController],
   providers: [ConfigService],
 })
 export class AppModule {}

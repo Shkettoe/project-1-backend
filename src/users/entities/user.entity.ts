@@ -1,4 +1,5 @@
 import { Post } from "src/posts/entities/post.entity";
+import { Vote } from "src/votes/vote.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
@@ -23,4 +24,7 @@ export class User {
 
     @OneToMany(() => Post, post => post.user)
     posts: Post[]
+
+    @OneToMany(() => Vote, vote => vote.user)
+    votes: Vote[]
 }
