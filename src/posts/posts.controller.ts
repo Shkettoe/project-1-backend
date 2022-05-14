@@ -41,10 +41,12 @@ export class PostsController {
 
   @Get('list')
   findAll(
-    @Query('limit', new DefaultValuePipe(1), ParseIntPipe) limit: number = 1,
-    @Query('sort', new DefaultValuePipe({posted_at: "DESC"})) sort: SortPosts,
+    @Query('limit', new DefaultValuePipe(6), ParseIntPipe) limit: number = 1,
+    @Query('posted_at') posted_at: SortPosts['posted_at'],
+    @Query('score') score: SortPosts['score'],
+    @Query('id') id: SortPosts['id'],
   ) {
-    return this.postsService.paginate({page: 1, limit}, sort);
+    return this.postsService.paginate({page: 1, limit}, {posted_at, score, id});
   }
 
   @Get(':id')
