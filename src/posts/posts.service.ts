@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { IPaginationOptions, paginate } from 'nestjs-typeorm-paginate';
+import { FindManyOptions, Repository } from 'typeorm';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { Post } from './entities/post.entity';
@@ -15,6 +16,10 @@ export class PostsService {
 
   findAll() {
     return this.postRepo.find({relations: ['user']})
+  }
+
+  async paginate(options: IPaginationOptions, order){
+    return (await paginate<Post>(this.postRepo, options, {relations: ['user'], order: order})).items
   }
 
   findOne(id: number) {

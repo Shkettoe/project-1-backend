@@ -38,6 +38,7 @@
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.0",
     "multer": "^1.4.4",
+    "nestjs-typeorm-paginate": "^3.2.0",
     "passport": "^0.5.2",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",

@@ -6,6 +6,12 @@ export class PostDto{
     content: string
 
     @Expose()
+    created_at: Date
+
+    @Expose()
+    updated_at: Date
+
+    @Expose()
     @Transform(({value}) => {return {id: value.id, first_name: value.first_name, last_name: value.last_name}})
     user: User
 }
