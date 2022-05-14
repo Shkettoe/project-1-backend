@@ -12,6 +12,7 @@ import { VoteService } from 'src/votes/vote.service';
 import { InauthorGuard } from './guards/inauthor.guard';
 import { FindManyOptions } from 'typeorm';
 import { Post as _Post } from './entities/post.entity';
+import { SortPosts } from './interfaces/sort-posts.interface';
 
 @Controller('posts')
 @UseGuards(AuthGuard('jwt'))
@@ -41,7 +42,7 @@ export class PostsController {
   @Get('list')
   findAll(
     @Query('limit', new DefaultValuePipe(1), ParseIntPipe) limit: number = 1,
-    @Query('sort', new DefaultValuePipe({posted_at: "DESC"})) sort,
+    @Query('sort', new DefaultValuePipe({posted_at: "DESC"})) sort: SortPosts,
   ) {
     return this.postsService.paginate({page: 1, limit}, sort);
   }

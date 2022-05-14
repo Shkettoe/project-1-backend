@@ -5,6 +5,7 @@ import { FindManyOptions, Repository } from 'typeorm';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { Post } from './entities/post.entity';
+import { SortPosts } from './interfaces/sort-posts.interface';
 
 @Injectable()
 export class PostsService {
@@ -18,8 +19,8 @@ export class PostsService {
     return this.postRepo.find({relations: ['user']})
   }
 
-  async paginate(options: IPaginationOptions, order){
-    return (await paginate<Post>(this.postRepo, options, {relations: ['user'], order: order})).items
+  async paginate(options: IPaginationOptions, order: SortPosts){
+    return (await paginate<Post>(this.postRepo, options, {relations: ['user'], order})).items
   }
 
   findOne(id: number) {
@@ -33,7 +34,9 @@ export class PostsService {
 
   async update(id: number, updatePostDto: UpdatePostDto) {
     const post = await this.findOne(id)
-    if(updatePostDto.content.length) post.content = updatePostDto.content
+    for (const key in updatePostDto) {
+      post[key] = updatePostDto[key]
+    }
     return this.postRepo.save(post)
   }
 

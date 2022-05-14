@@ -16,6 +16,9 @@ export class Post {
     @UpdateDateColumn()
     updated_at: Date
 
+    @Column({default: 0})
+    score: number
+
     @ManyToOne(() => User, user => user.posts, {cascade: true, onDelete: 'CASCADE', onUpdate: 'CASCADE'})
     user: User
 
