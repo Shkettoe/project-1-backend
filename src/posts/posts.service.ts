@@ -21,6 +21,11 @@ export class PostsService {
     return this.postRepo.findOneOrFail(id, {relations: ['user']})
   }
 
+  async findRandom(){
+    const posts = await this.findAll()
+    return posts[Math.floor(Math.random() * posts.length)]
+  }
+
   async update(id: number, updatePostDto: UpdatePostDto) {
     const post = await this.findOne(id)
     if(updatePostDto.content.length) post.content = updatePostDto.content

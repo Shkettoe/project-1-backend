@@ -46,6 +46,11 @@ export class PostsController {
     return this.postsService.findOne(id);
   }
 
+  @Get('')
+  random(){
+    return this.postsService.findRandom()
+  }
+
   @Patch('myquote/:id')
   @UseGuards(AuthorGuard)
   update(@Param('id') id: number, @Body() body: UpdatePostDto) {
