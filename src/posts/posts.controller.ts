@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, DefaultValuePipe, ParseIntPipe, Query } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
@@ -10,6 +10,9 @@ import { Portray } from 'src/interceptors/serialise.interceptor';
 import { PostDto } from './dto/post.dto';
 import { VoteService } from 'src/votes/vote.service';
 import { InauthorGuard } from './guards/inauthor.guard';
+import { FindManyOptions } from 'typeorm';
+import { Post as _Post } from './entities/post.entity';
+import { SortPosts } from './interfaces/sort-posts.interface';
 
 @Controller('posts')
 @UseGuards(AuthGuard('jwt'))
@@ -37,8 +40,13 @@ export class PostsController {
   }
 
   @Get('list')
-  findAll() {
-    return this.postsService.findAll();
+  findAll(
+    @Query('limit', new DefaultValuePipe(6), ParseIntPipe) limit: number = 1,
+    @Query('posted_at') posted_at: SortPosts['posted_at'],
+    @Query('score') score: SortPosts['score'],
+    @Query('id') id: SortPosts['id'],
+  ) {
+    return this.postsService.paginate({page: 1, limit}, {posted_at, score, id});
   }
 
   @Get(':id')

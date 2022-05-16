@@ -1,6 +1,6 @@
 import { User } from "src/users/entities/user.entity";
 import { Vote } from "src/votes/vote.entity";
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class Post {
@@ -9,6 +9,15 @@ export class Post {
 
     @Column({nullable: false})
     content: string
+
+    @CreateDateColumn()
+    posted_at: Date
+
+    @UpdateDateColumn()
+    updated_at: Date
+
+    @Column({default: 0})
+    score: number
 
     @ManyToOne(() => User, user => user.posts, {cascade: true, onDelete: 'CASCADE', onUpdate: 'CASCADE'})
     user: User
