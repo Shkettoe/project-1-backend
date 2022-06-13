@@ -28,13 +28,17 @@ export class AuthService {
         return password
     }
 
+    async dehash(password: CreateUserDto['password'], input_password: string){
+        const [salt, hash] = password.split("|")
+        input_password = await bcrypt.hashSync(input_password, salt)
+        if(input_password !== hash) throw new UnauthorizedException('incorrect password')
+    }
+
     async login(email: CreateUserDto['email'], password: CreateUserDto['password']){
         const [user] = await this.usersService.findAll({email})
         if(!user) throw new NotFoundException('user with that email not found')
 
-        const [salt, hash] = user.password.split('|')
-        const pass = bcrypt.hashSync(password, salt)
-        if(pass !== hash) throw new UnauthorizedException('incorrect password')
+        await this.dehash(user.password, password)
 
         return {jwt: await this.jwtService.sign({sub: user.id}), user: user}
     }

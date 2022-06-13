@@ -15,6 +15,11 @@ export class VoteService {
         return v0te
     }
 
+    async findAll(){
+        const votes = await this.voteRepo.find({relations: ['post', 'user', 'post.user']})
+        return votes
+    }
+
     async vote(val: boolean, user: User, post: Post){
         const voted = await this.getVote(user, post)
         if(voted){

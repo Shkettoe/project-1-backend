@@ -18,14 +18,14 @@ export class UsersService {
 
   async findAll(query: Partial<User>) {
     const q = plainToClass(UserDto, query)
-    const users = await this.userRepo.find({where: q, relations: ['posts']})
+    const users = await this.userRepo.find({where: q, relations: ['posts', 'votes', 'votes.post', 'votes.post.user']})
     if(!users.length) throw new NotFoundException(`couldn't find users based off given query`)
     return users
   }
 
   async findOne(id: User['id']) {
     try{
-      return await this.userRepo.findOneOrFail(id)
+      return await this.userRepo.findOneOrFail(id, {relations: ['posts', 'votes', 'votes.post', 'votes.post.user']})
     }
     catch(err){
       throw new NotFoundException('user not found', err)

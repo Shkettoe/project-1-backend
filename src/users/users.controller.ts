@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Res, UseGuards, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Res, UseGuards, UploadedFile, UseInterceptors, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserDto } from './dto/user.dto';
@@ -14,6 +14,7 @@ import { diskStorage } from 'multer';
 import { extname } from 'path';
 import * as crypto from 'crypto'
 import { ConfigService } from '@nestjs/config';
+import * as bcrypt from 'bcrypt'
 
 @Controller('users')
 @Portray(UserDto)
@@ -60,7 +61,6 @@ export class UsersController {
   }
 
   @Get('uploads/:path')
-  @UseGuards(AuthGuard('jwt'))
   async get(@Param('path') path, @Res() res: Response) {
       res.sendFile(path, { root: 'public/uploads' })
   }
@@ -86,7 +86,8 @@ export class UsersController {
   }
 
   @Patch('/me/update-password')
-  async updatePassword(@CurrentUser() user: User, @Body() {password, confirm_password}: {password: string, confirm_password: string}) {
+  async updatePassword(@CurrentUser() user: User, @Body() {current_password, password, confirm_password}: {current_password: string,password: string, confirm_password: string}) {
+    await this.authService.dehash(user.password, current_password)
     if(password === confirm_password){
       password = await this.authService.hash(password)
       return await this.usersService.update(user.id, {password});

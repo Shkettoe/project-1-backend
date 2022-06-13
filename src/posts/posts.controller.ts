@@ -15,25 +15,25 @@ import { Post as _Post } from './entities/post.entity';
 import { SortPosts } from './interfaces/sort-posts.interface';
 
 @Controller('posts')
-@UseGuards(AuthGuard('jwt'))
-@Portray(PostDto)
+// @Portray(PostDto)
 export class PostsController {
   constructor(private readonly postsService: PostsService, private readonly voteService: VoteService) {}
 
   @Post('myquote')
+  @UseGuards(AuthGuard('jwt'))
   create(@Body() body: Partial<CreatePostDto>, @CurrentUser() user: User) {
     return this.postsService.create({content: body.content, user});
   }
 
   @Post(':id/upvote')
-  @UseGuards(InauthorGuard)
+  @UseGuards(InauthorGuard, AuthGuard('jwt'))
   async upvote(@CurrentUser() user: User, @Param('id') id: number){
     const post = await this.findOne(id)
     return this.voteService.vote(true, user, post)
   }
 
   @Post(':id/downvote')
-  @UseGuards(InauthorGuard)
+  @UseGuards(InauthorGuard, AuthGuard('jwt'))
   async downvote(@CurrentUser() user: User, @Param('id') id: number){
     const post = await this.findOne(id)
     return this.voteService.vote(false, user, post)
@@ -49,6 +49,11 @@ export class PostsController {
     return this.postsService.paginate({page: 1, limit}, {posted_at, score, id});
   }
 
+  @Get('votes')
+  findAllVotes(){
+    return this.voteService.findAll()
+  }
+
   @Get(':id')
   findOne(@Param('id') id: number) {
     return this.postsService.findOne(id);
@@ -60,13 +65,13 @@ export class PostsController {
   }
 
   @Patch('myquote/:id')
-  @UseGuards(AuthorGuard)
+  @UseGuards(AuthorGuard, AuthGuard('jwt'))
   update(@Param('id') id: number, @Body() body: UpdatePostDto) {
     return this.postsService.update(id, body);
   }
 
   @Delete(':id')
-  @UseGuards(AuthorGuard)
+  @UseGuards(AuthorGuard, AuthGuard('jwt'))
   remove(@Param('id') id: number) {
     return this.postsService.remove(id);
   }
