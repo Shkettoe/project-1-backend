@@ -15,7 +15,7 @@ import { Post as _Post } from './entities/post.entity';
 import { SortPosts } from './interfaces/sort-posts.interface';
 
 @Controller('posts')
-// @Portray(PostDto)
+@Portray(PostDto)
 export class PostsController {
   constructor(private readonly postsService: PostsService, private readonly voteService: VoteService) {}
 
