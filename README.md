@@ -1,11 +1,11 @@
-#Backend for Quotastic website
+# Backend for Quotastic website
 
-##Local installation
+## Local installation
 ```
 $ npm install
 ```
 
-##Setting up a database
+## Setting up a database
 <p>Create a local database</p>
 <p>Create a .env file with data:</p>
 ```
@@ -26,7 +26,7 @@ PGDATABASE=[the name of the database]
     }
 }]
 ```
-##Running a local instance
+## Running a local instance
 ```
 $ npm run build
 
