@@ -7,20 +7,22 @@ import { PostsModule } from './posts/posts.module';
 import { Post } from './posts/entities/post.entity';
 import { Vote } from './votes/vote.entity';
 import { AppController } from './app.controller';
-import { PostsService } from './posts/posts.service';
 
 @Module({
   imports: [ConfigModule.forRoot({isGlobal: true, envFilePath: '.env'}), TypeOrmModule.forRootAsync({
     imports: [ConfigModule],
     useFactory: async (configService: ConfigService) => ({
       type: 'postgres',
-      host: configService.get('HOST'),
+      host: configService.get('PGHOST'),
       port: configService.get('PGPORT'),
       username: configService.get('PGUSER'),
       password: configService.get('PGPASSWORD'),
       database: configService.get('PGDATABASE'),
       synchronize: false,
-      entities: [User, Post, Vote]
+      entities: [User, Post, Vote],
+      ssl: {
+        rejectUnauthorized: false
+      }
     }),
     inject: [ConfigService]
   }), UsersModule, PostsModule],
