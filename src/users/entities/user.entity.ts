@@ -1,6 +1,8 @@
+import { ConfigService } from "@nestjs/config";
 import { Post } from "src/posts/entities/post.entity";
 import { Vote } from "src/votes/vote.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+require('dotenv').config()
 
 @Entity()
 export class User {
@@ -19,7 +21,7 @@ export class User {
     @Column({nullable: false})
     password: string
 
-    @Column({default: 'http://localhost:8000/users/uploads/default.png'})
+    @Column({default: `${process.env.URL}/users/uploads/default.png`})
     avatar: string
 
     @OneToMany(() => Post, post => post.user)
