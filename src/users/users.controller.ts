@@ -56,7 +56,7 @@ export class UsersController {
     })
   }))
   async changePicture(@UploadedFile() file: Express.Multer.File, @CurrentUser() user: User){
-    const url = `http://${this.configService.get('HOST')}:${this.configService.get('PORT')}/users/uploads/${file.filename}`
+    const url = `${this.configService.get('URL')}/users/uploads/${file.filename}`
     return await this.usersService.update(user.id, {avatar: url})
   }
 
