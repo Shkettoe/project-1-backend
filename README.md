@@ -6,7 +6,7 @@ $ npm install
 ```
 
 ## Setting up a database
-<p>Create a local database</p>
+<p>Create a local postgres database</p>
 <p>Create a .env file with data:</p>
 
 ```
@@ -35,6 +35,10 @@ To enable migrations make a ormconfig.json file as follows:
     "synchronize": false,
     "cli":{
         "migrationsDir": "src/migration"
+    }
+    // if you're not going to use a local database but rather a hosted one include this
+    "ssl": {
+        "rejectUnauthorized": false
     }
 }]
 ```
