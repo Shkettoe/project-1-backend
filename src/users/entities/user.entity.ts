@@ -22,6 +22,7 @@ export class User {
     password: string
 
     @Column({default: `https://res.cloudinary.com/hltwyr1hg/image/upload/v1655724330/default_mlgmtf.png`})
+    // @Column({default: `${process.env.URL}/users/uploads/default.png`})
     avatar: string
 
     @OneToMany(() => Post, post => post.user)

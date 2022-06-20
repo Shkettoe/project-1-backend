@@ -42,6 +42,17 @@ To enable migrations make a ormconfig.json file as follows:
     }
 }]
 ```
+
+## Images and upload
+
+<p>By default, image upload is configured to use Cloudinary services. To upload images locally follow these steps:</p>
+
+- Open terminal and run `rm -r public & mkdir -p public/uploads`
+- Look up some default avatars or create your own, put the avatar you like the best into public/uploads folder and rename it to default.png
+- Ctrl P and type user.entity.ts, then Ctrl F and type in avatar, uncomment the commented line and comment the one above it
+- Ctrl P user.controller.ts, Ctrl F //, uncommenct the commented line and comment the one above it
+- Run `npm run build` just in case
+
 ## Running a local instance
 ```bash
 

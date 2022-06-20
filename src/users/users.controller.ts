@@ -58,13 +58,13 @@ export class UsersController {
     })
   }))
   async changePicture(@UploadedFile() file: Express.Multer.File, @CurrentUser() user: User){
-    // var url = {url: `${this.configService.get('URL')}/users/uploads/${file.filename}`}
     cloudinary.config({
       cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
       api_key: process.env.CLOUDINARY_API_KEY,
       api_secret: process.env.CLOUDINARY_API_SECRET
     })
     var url = await cloudinary.uploader.upload(`public/uploads/${file.filename}`)
+    // var url = {url: `${this.configService.get('URL')}/users/uploads/${file.filename}`}
     return await this.usersService.update(user.id, {avatar: url.url})
   }
 
