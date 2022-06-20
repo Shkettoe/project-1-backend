@@ -15,6 +15,8 @@ import { extname } from 'path';
 import * as crypto from 'crypto'
 import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt'
+const cloudinary = require('cloudinary').v2
+require('dotenv').config()
 
 @Controller('users')
 @Portray(UserDto)
@@ -56,8 +58,14 @@ export class UsersController {
     })
   }))
   async changePicture(@UploadedFile() file: Express.Multer.File, @CurrentUser() user: User){
-    const url = `${this.configService.get('URL')}/users/uploads/${file.filename}`
-    return await this.usersService.update(user.id, {avatar: url})
+    cloudinary.config({
+      cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
+      api_key: process.env.CLOUDINARY_API_KEY,
+      api_secret: process.env.CLOUDINARY_API_SECRET
+    })
+    var url = await cloudinary.uploader.upload(`public/uploads/${file.filename}`)
+    // var url = {url: `${this.configService.get('URL')}/users/uploads/${file.filename}`}
+    return await this.usersService.update(user.id, {avatar: url.url})
   }
 
   @Get('uploads/:path')
