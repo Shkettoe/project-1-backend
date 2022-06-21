@@ -6,7 +6,7 @@ import * as cookieparser from 'cookie-parser'
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(cookieparser())
-  app.enableCors({credentials: true, origin: ['http://localhost:3000', 'https://quotastiscie.herokuapp.com/']})
+  app.enableCors({credentials: true, origin: process.env.CORS_ORIGIN})
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true
   }))
