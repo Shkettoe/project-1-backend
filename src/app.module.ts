@@ -20,9 +20,9 @@ import { AppController } from './app.controller';
       database: configService.get('PGDATABASE'),
       synchronize: false,
       entities: [User, Post, Vote],
-      ssl: {
-        rejectUnauthorized: false
-      }
+      // ssl: {
+      //   rejectUnauthorized: false
+      // }
     }),
     inject: [ConfigService]
   }), UsersModule, PostsModule],

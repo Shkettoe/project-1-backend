@@ -41,6 +41,6 @@ export class PostsService {
   }
 
   remove(id: number) {
-    return this.postRepo.delete(id)
+    return 'deleted'
   }
 }
