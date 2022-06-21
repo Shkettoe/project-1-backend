@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IPaginationOptions, paginate } from 'nestjs-typeorm-paginate';
 import { Repository } from 'typeorm';
@@ -23,8 +23,12 @@ export class PostsService {
     return (await paginate<Post>(this.postRepo, options, {relations: ['user'], order})).items
   }
 
-  findOne(id: number) {
-    return this.postRepo.findOneOrFail(id, {relations: ['user']})
+  async findOne(id: number) {
+    try{
+      return await this.postRepo.findOneOrFail(id, {relations: ['user']})
+    }catch(err){
+      throw new NotFoundException(`post with an id of ${id} couldn't be found`, err)
+    }
   }
 
   async findRandom(){
@@ -41,6 +45,7 @@ export class PostsService {
   }
 
   remove(id: number) {
-    return 'deleted'
+    return this.postRepo.delete(id)
+    // return 'deleted'
   }
 }

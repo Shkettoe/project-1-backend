@@ -73,6 +73,7 @@ export class PostsController {
   @Delete(':id')
   @UseGuards(AuthorGuard, AuthGuard('jwt'))
   remove(@Param('id') id: number) {
-    return this.postsService.remove(id);
+    this.postsService.remove(id);
+    return 'deleted'
   }
 }
