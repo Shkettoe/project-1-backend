@@ -27,7 +27,7 @@ export class UsersController {
   @UseGuards(InauthGuard)
   async register(@Body() createUserDto: CreateUserDto, @Res({passthrough: true})response: Response) {
     const {jwt, user} = await this.authService.register(createUserDto);
-    response.cookie('jwt', jwt, {httpOnly: true})
+    response.cookie('jwt', jwt, {httpOnly: true, sameSite: 'none', secure: true})
     return user
   }
 
@@ -35,14 +35,14 @@ export class UsersController {
   @UseGuards(AuthGuard('local'), InauthGuard)
   async login(@Body() body: {email: string, password: string}, @Res({passthrough: true})response: Response){
     const {jwt, user} = await this.authService.login(body.email, body.password)
-    response.cookie('jwt', jwt, {httpOnly: true})
+    response.cookie('jwt', jwt, {httpOnly: true, sameSite: 'none', secure: true})
     return user
   }
 
   @Post('logout')
   @UseGuards(AuthGuard('jwt'))
   async logout(@Res({passthrough: true}) res: Response){
-    res.clearCookie('jwt', {httpOnly: true})
+    res.clearCookie('jwt', {httpOnly: true, sameSite: 'none', secure: true})
     return 'logged out'
   }
 
@@ -105,7 +105,7 @@ export class UsersController {
 
   @Delete('/me')
   remove(@CurrentUser() user: User, @Res({ passthrough: true }) res: Response) {
-    res.clearCookie('jwt', {httpOnly: true})
+    res.clearCookie('jwt', {httpOnly: true, sameSite: 'none', secure: true})
     return this.usersService.remove(user.id);
   }
 }
